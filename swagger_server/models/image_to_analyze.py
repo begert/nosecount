@@ -15,16 +15,16 @@ class ImageToAnalyze(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, image_data: ByteArray=None, image_url: str=None):  # noqa: E501
+    def __init__(self, image_data: str=None, image_url: str=None):  # noqa: E501
         """ImageToAnalyze - a model defined in Swagger
 
         :param image_data: The image_data of this ImageToAnalyze.  # noqa: E501
-        :type image_data: ByteArray
+        :type image_data: str
         :param image_url: The image_url of this ImageToAnalyze.  # noqa: E501
         :type image_url: str
         """
         self.swagger_types = {
-            'image_data': ByteArray,
+            'image_data': str,
             'image_url': str
         }
 
@@ -48,22 +48,22 @@ class ImageToAnalyze(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def image_data(self) -> ByteArray:
+    def image_data(self) -> str:
         """Gets the image_data of this ImageToAnalyze.
 
 
         :return: The image_data of this ImageToAnalyze.
-        :rtype: ByteArray
+        :rtype: str
         """
         return self._image_data
 
     @image_data.setter
-    def image_data(self, image_data: ByteArray):
+    def image_data(self, image_data: str):
         """Sets the image_data of this ImageToAnalyze.
 
 
         :param image_data: The image_data of this ImageToAnalyze.
-        :type image_data: ByteArray
+        :type image_data: str
         """
         if image_data is not None and not re.search(r'^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$', image_data):  # noqa: E501
             raise ValueError("Invalid value for `image_data`, must be a follow pattern or equal to `/^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/`")  # noqa: E501
