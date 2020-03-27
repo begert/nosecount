@@ -18,4 +18,5 @@ def post_image(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = ImageToAnalyze.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    return ImageAnalysis(5, 0.0)
