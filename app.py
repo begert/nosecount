@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flasgger import Swagger
-from random import randint
+from imageai.Detection import ObjectDetection
+import imageio as io
 
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
@@ -14,6 +15,10 @@ app.debug = True
 
 swagger = Swagger(app)
 
+detector = ObjectDetection()
+detector.setModelTypeAsTinyYOLOv3()
+detector.setModelPath("yolo-tiny.h5")
+detector.loadModel()
 
 @app.route('/nosecount', methods=["POST"])
 def post_image():
@@ -55,8 +60,28 @@ def post_image():
         description: "Invalid input"
     """
 
-    return jsonify(personCount=randint(0, 9),
-                   accuracy=randint(70, 100))
+    image_url = request.json['imageUrl']
+
+    img = io.imread(image_url)
+    detection = detector.detectObjectsFromImage(
+        input_image=img,
+        input_type='array',
+        output_image_path='output.jpg',
+        output_type='file',
+        thread_safe=True
+    )
+
+    counter = 0
+    accuracy = 0
+    for item in detection:
+        if item["name"] == 'person':
+            counter += 1
+            accuracy += item["percentage_probability"]
+    if counter > 0:
+        accuracy = accuracy/counter
+
+    return jsonify(personCount=counter,
+                   accuracy=accuracy)
 
 
 @app.route('/echo')
