@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 from flasgger import Swagger
 from imageai.Detection import ObjectDetection
-import imageio as io
+from imageio import imread
+import io
+import base64
 
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
@@ -61,8 +63,13 @@ def post_image():
     """
 
     image_url = request.json['imageUrl']
+    image_data = request.json['imageData']
 
-    img = io.imread(image_url)
+    if image_data:
+        img = imread(io.BytesIO(base64.b64decode(image_data)))
+    else:
+        img = imread(image_url)
+
     detection = detector.detectObjectsFromImage(
         input_image=img,
         input_type='array',

@@ -52,6 +52,9 @@ A mirror of the repo exists in git.ffhs.ch.
     
     git clone https://git.ffhs.ch/mathias.begert/nosecount.git
     
+## Android Demo-App
+
+A Demo Android App exists here: https://git.ffhs.ch/janik.mabboux/noseandroid
     
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
