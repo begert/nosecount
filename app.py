@@ -86,6 +86,8 @@ def post_image():
             accuracy += item["percentage_probability"]
     if counter > 0:
         accuracy = accuracy/counter
+    else:
+        accuracy = 100
 
     return jsonify(personCount=counter,
                    accuracy=accuracy)
@@ -94,7 +96,7 @@ def post_image():
 @app.route('/echo')
 def echo():
     """
-    API rout for simple echo
+    API route for simple echo
     ---
     tags:
       - Other services
