@@ -87,7 +87,7 @@ def post_image():
     if counter > 0:
         accuracy = accuracy/counter
     else:
-        accuracy = 100
+        accuracy = 99
 
     return jsonify(personCount=counter,
                    accuracy=accuracy)
