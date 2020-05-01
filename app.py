@@ -36,14 +36,15 @@ def post_image():
     parameters:
       - in: "body"
         name: "body"
-        description: "Plain image or image as json object"
+        description: "Plain image as base64 encoded string (imageData)
+        or image as a a publicly accessible URL (imageUrl).
+        "
         required: true
         schema:
           type: "object"
           properties:
             imageData:
               type: "string"
-              format: "byte"
             imageUrl:
               type: "string"
     responses:
@@ -62,13 +63,12 @@ def post_image():
         description: "Invalid input"
     """
 
-    image_url = request.json['imageUrl']
-    image_data = request.json['imageData']
-
-    if image_data:
-        img = imread(io.BytesIO(base64.b64decode(image_data)))
-    else:
+    if "imageUrl" in request.json:
+        image_url = request.json['imageUrl']
         img = imread(image_url)
+    else:
+        image_data = request.json['imageData']
+        img = imread(io.BytesIO(base64.b64decode(image_data)))
 
     detection = detector.detectObjectsFromImage(
         input_image=img,
