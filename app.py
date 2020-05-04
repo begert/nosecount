@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flasgger import Swagger
 from imageai.Detection import ObjectDetection
 from imageio import imread
@@ -125,6 +125,21 @@ def echo():
     print("echo: p -", p)
 
     return jsonify(p=p)
+
+
+@app.route('/example.png')
+def example_img_png():
+    return send_file("tools/example.png")
+
+
+@app.route('/example.jpg')
+def example_img_jpg():
+    return send_file("tools/example.jpg")
+
+
+@app.route('/example.gif')
+def example_img_gif():
+    return send_file("tools/example.gif")
 
 
 if __name__  == '__main__':
