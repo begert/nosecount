@@ -46,6 +46,14 @@ To deploy changes, commit and push them to the master branch.
     # this will trigger the deployment
     git push heroku master 
 
+## Tests
+
+To run tests install "pytest" and run it
+    
+    pip3 install -U pytest
+    pytest
+    
+
 ## Repo in git.ffhs.ch
 
 A mirror of the repo exists in git.ffhs.ch.
