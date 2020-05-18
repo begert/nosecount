@@ -22,6 +22,11 @@ detector.setModelTypeAsTinyYOLOv3()
 detector.setModelPath("yolo-tiny.h5")
 detector.loadModel()
 
+
+def fail(msg):
+    return jsonify(error=msg), 400
+
+
 @app.route('/nosecount', methods=["POST"])
 def post_image():
     """
@@ -65,18 +70,32 @@ def post_image():
 
     if "imageUrl" in request.json:
         image_url = request.json['imageUrl']
-        img = imread(image_url)
-    else:
-        image_data = request.json['imageData']
-        img = imread(io.BytesIO(base64.b64decode(image_data)))
+        try:
+            img = imread(image_url)
+        except (FileNotFoundError, IOError):
+            return fail("Could not fetch content at this imageUrl")
+        except ValueError as e:
+            return fail(str(e))
 
-    detection = detector.detectObjectsFromImage(
-        input_image=img,
-        input_type='array',
-        output_image_path='output.jpg',
-        output_type='file',
-        thread_safe=True
-    )
+    elif "imageData" in request.json:
+        try:
+            image_data = request.json['imageData']
+            img = imread(io.BytesIO(base64.b64decode(image_data)))
+        except ValueError as e:
+            return fail("Could not read base64 imageData. " + str(e))
+    else:
+        return fail("Either imageUrl or imageData must be provided.")
+
+    try:
+        detection = detector.detectObjectsFromImage(
+            input_image=img,
+            input_type='array',
+            output_image_path='output.jpg',
+            output_type='file',
+            thread_safe=True
+        )
+    except:
+        return fail("Detection failed.")
 
     counter = 0
     accuracy = 0
@@ -85,7 +104,7 @@ def post_image():
             counter += 1
             accuracy += item["percentage_probability"]
     if counter > 0:
-        accuracy = accuracy/counter
+        accuracy = accuracy / counter
     else:
         accuracy = 99
 
@@ -142,6 +161,6 @@ def example_img_gif():
     return send_file("tools/example.gif")
 
 
-if __name__  == '__main__':
+if __name__ == '__main__':
     app.debug = True
-    app.run(host="0.0.0.0",port=5777)
+    app.run(host="0.0.0.0", port=5777)

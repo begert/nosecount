@@ -2,7 +2,7 @@ import unittest
 import requests
 
 
-class NosecountApiTest(unittest.TestCase):
+class NoseCountApiTest(unittest.TestCase):
 
     def test_base64(self):
         filename = "tools/example.base64"
